@@ -1,0 +1,9 @@
+<svg width="512" height="512" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="title desc">
+  <title id="title">unlocode logo</title>
+  <desc id="desc">A simple mark combining code chevrons and a location pin.</desc>
+  <circle cx="12" cy="12" r="9" stroke="#0EA5E9" stroke-opacity="0.28" stroke-width="1.75"/>
+  <path d="M8 9L5 12L8 15" stroke="#0EA5E9" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M16 9L19 12L16 15" stroke="#0EA5E9" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M12 6.5C10.07 6.5 8.5 8.07 8.5 10C8.5 12.48 11.09 15.7 11.75 16.47C11.88 16.62 12.12 16.62 12.25 16.47C12.91 15.7 15.5 12.48 15.5 10C15.5 8.07 13.93 6.5 12 6.5Z" stroke="#0EA5E9" stroke-width="1.75" stroke-linejoin="round"/>
+  <circle cx="12" cy="10" r="1" fill="#0EA5E9"/>
+</svg>
