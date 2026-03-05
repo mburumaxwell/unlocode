@@ -282,6 +282,13 @@ function UnlocodeDetail({ entry }: { entry: UnlocodeEntry }) {
           <dd className='text-muted-foreground'>Coordinates unavailable</dd>
         )}
       </div>
+
+      {entry.iata && (
+        <div className='space-y-0.5'>
+          <dt className='text-xs font-medium uppercase tracking-wider text-muted-foreground'>IATA Code</dt>
+          <dd className='font-mono text-xs'>{entry.iata}</dd>
+        </div>
+      )}
     </dl>
   );
 }

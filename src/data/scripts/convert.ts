@@ -33,12 +33,8 @@ const FUNCTION_CLASSIFIERS: FunctionClassifier[] = [
 const KNOWN_STATUS_CODES = new Set<string>(UnlocodeStatusCodeSchema.options);
 const KNOWN_FUNCTION_CODES = new Set<string>(UnlocodeFunctionCodeSchema.options);
 
-function clean(value: string | undefined): string {
-  return (value ?? '').trim();
-}
-
-function parseCoordinates(value: string | undefined): UnlocodeEntry['coordinates'] {
-  const compact = clean(value).toUpperCase().replace(/\s+/g, '');
+function parseCoordinates(value: string): UnlocodeEntry['coordinates'] {
+  const compact = value.toUpperCase().replace(/\s+/g, '');
   if (!compact) return null;
 
   const match = compact.match(/^(\d{2})(\d{2})([NS])(\d{3})(\d{2})([EW])$/);
@@ -83,9 +79,9 @@ async function detectLatestRelease(rawDir: string): Promise<string | undefined> 
   return releases.at(-1)?.text;
 }
 
-function parseFunctions(classifier: string | undefined, unknownClassifiers: Set<string>): UnlocodeFunctionCode[] {
+function parseFunctions(classifier: string, unknownClassifiers: Set<string>): UnlocodeFunctionCode[] {
   const result: UnlocodeFunctionCode[] = [];
-  const normalized = clean(classifier).padEnd(8, '-').slice(0, 8).toUpperCase();
+  const normalized = classifier.padEnd(8, '-').slice(0, 8).toUpperCase();
 
   for (const { index, symbol, code } of FUNCTION_CLASSIFIERS) {
     const ch = normalized[index] ?? '-';
@@ -121,6 +117,8 @@ async function main() {
   const unknownStatuses = new Set<string>();
   const unknownClassifiers = new Set<string>();
 
+  const clean = (value: string | undefined): string => (value ?? '').trim();
+
   for (const fileName of partFiles) {
     const filePath = path.join(RAW_DIR, fileName);
     const content = await readFile(filePath, 'latin1');
@@ -139,7 +137,8 @@ async function main() {
       const name_native = clean(row[3]);
       const subdivision = clean(row[5]).toUpperCase();
       const status = clean(row[7]).toUpperCase();
-      const coordinates = parseCoordinates(row[10]);
+      const iata = clean(row[9]).toUpperCase();
+      const coordinates = parseCoordinates(clean(row[10]));
 
       // Skip country headers and alias/metadata rows.
       if (!country || !location || !name || name.startsWith('.')) continue;
@@ -150,7 +149,7 @@ async function main() {
         continue;
       }
 
-      const functions = parseFunctions(row[6], unknownClassifiers);
+      const functions = parseFunctions(clean(row[6]), unknownClassifiers);
       const code = `${country}${location}`;
 
       entriesByCode.set(code, {
@@ -158,6 +157,7 @@ async function main() {
         location,
         name,
         ...(name_native && name_native !== name ? { name_native } : {}),
+        ...(iata ? { iata } : {}),
         subdivision,
         functions,
         status: UnlocodeStatusCodeSchema.parse(status),

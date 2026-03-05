@@ -130,6 +130,14 @@ function UnlocodeDetailPanel({ entry }: { entry: UnlocodeEntry }) {
         </span>
       ),
     },
+    ...(entry.iata
+      ? [
+          {
+            label: 'IATA Code',
+            content: <span className='font-mono text-sm'>{entry.iata}</span>,
+          },
+        ]
+      : []),
     {
       label: 'Coordinates',
       content: entry.coordinates ? (

@@ -54,6 +54,17 @@ describe('data/index', () => {
     expect(new Date(meta.generatedAt).toString()).not.toBe('Invalid Date');
   });
 
+  it('stores correct iata for GBABD (Aberdeen)', () => {
+    const entry = getEntryByCode('GBABD');
+    expect(entry).toBeDefined();
+    expect(entry?.iata).toBe('ABZ');
+  });
+
+  it('searches by IATA code', () => {
+    const { results } = searchUnlocodeDatabase({ query: 'ABZ' });
+    expect(results.some((r) => r.iata === 'ABZ')).toBe(true);
+  });
+
   it('stores correct name_native for ADEAC (Escàs)', () => {
     const entry = getEntryByCode('ADEAC');
     expect(entry).toBeDefined();

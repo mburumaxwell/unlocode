@@ -44,6 +44,7 @@ export function searchUnlocodeDatabase(params: {
         (e.name_native?.toLowerCase().includes(q) ?? false) ||
         e.location.toLowerCase().includes(q) ||
         e.code.toLowerCase().includes(q) ||
+        (e.iata?.toLowerCase().includes(q) ?? false) ||
         `${e.country} ${e.name}`.toLowerCase().includes(q),
     );
   }
