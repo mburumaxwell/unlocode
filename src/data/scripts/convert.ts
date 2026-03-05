@@ -123,7 +123,7 @@ async function main() {
 
   for (const fileName of partFiles) {
     const filePath = path.join(RAW_DIR, fileName);
-    const content = await readFile(filePath, 'utf8');
+    const content = await readFile(filePath, 'latin1');
     const rows = parse(content, {
       bom: true,
       columns: false,
@@ -136,6 +136,7 @@ async function main() {
       const country = clean(row[1]).toUpperCase();
       const location = clean(row[2]).toUpperCase();
       const name = clean(row[4] || row[3]);
+      const name_native = clean(row[3]);
       const subdivision = clean(row[5]).toUpperCase();
       const status = clean(row[7]).toUpperCase();
       const coordinates = parseCoordinates(row[10]);
@@ -156,6 +157,7 @@ async function main() {
         country,
         location,
         name,
+        ...(name_native && name_native !== name ? { name_native } : {}),
         subdivision,
         functions,
         status: UnlocodeStatusCodeSchema.parse(status),

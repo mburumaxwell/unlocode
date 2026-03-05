@@ -41,6 +41,7 @@ export function searchUnlocodeDatabase(params: {
     filtered = filtered.filter(
       (e) =>
         e.name.toLowerCase().includes(q) ||
+        (e.name_native?.toLowerCase().includes(q) ?? false) ||
         e.location.toLowerCase().includes(q) ||
         e.code.toLowerCase().includes(q) ||
         `${e.country} ${e.name}`.toLowerCase().includes(q),

@@ -50,7 +50,8 @@ export const UnlocodeEntrySchema = z.object({
   code: z.string(), // e.g. "USNYC"
   country: z.string(), // e.g. "US"
   location: z.string(), // e.g. "NYC"
-  name: z.string(), // e.g. "New York"
+  name: z.string(), // e.g. "New York" (ASCII, no diacritics)
+  name_native: z.string().optional(), // e.g. "Łódź" — original name with diacritics; omitted when identical to `name`
   subdivision: z.string(), // e.g. "NY"
   functions: UnlocodeFunctionCodeSchema.array(), // e.g. ["port", "airport", "postal_exchange"]
   status: UnlocodeStatusCodeSchema, // e.g. "AA"

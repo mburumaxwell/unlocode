@@ -72,6 +72,14 @@ function UnlocodeDetailPanel({ entry }: { entry: UnlocodeEntry }) {
     : undefined;
 
   const rows: { label: string; content: React.ReactNode }[] = [
+    ...(entry.name_native
+      ? [
+          {
+            label: 'Native Name',
+            content: <span>{entry.name_native}</span>,
+          },
+        ]
+      : []),
     {
       label: 'UN/LOCODE',
       content: (

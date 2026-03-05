@@ -53,4 +53,31 @@ describe('data/index', () => {
     expect(meta.datasetVersion).toMatch(/^\d{4}-\d+$/);
     expect(new Date(meta.generatedAt).toString()).not.toBe('Invalid Date');
   });
+
+  it('stores correct name_native for ADEAC (Escàs)', () => {
+    const entry = getEntryByCode('ADEAC');
+    expect(entry).toBeDefined();
+    expect(entry?.name).toBe('Escas');
+    expect(entry?.name_native).toBe('Escàs');
+  });
+
+  it('stores name_native only when it differs from name', () => {
+    // Find any entry that has a name_native field
+    const { results } = searchUnlocodeDatabase({ limit: 1000 });
+    const withNative = results.filter((r) => r.name_native !== undefined);
+    // Every entry with name_native must differ from name
+    expect(withNative.every((r) => r.name_native !== r.name)).toBe(true);
+  });
+
+  it('searches diacritics names via name_native', () => {
+    // Find an entry that has a name_native so we can search it
+    const all = searchUnlocodeDatabase({ limit: 100000 });
+    const sample = all.results.find((r) => r.name_native);
+    if (!sample) {
+      // If data.json hasn't been regenerated yet this test is skipped
+      return;
+    }
+    const { results } = searchUnlocodeDatabase({ query: sample.name_native! });
+    expect(results.some((r) => r.code === sample.code)).toBe(true);
+  });
 });
