@@ -1,3 +1,21 @@
+/**
+ * Converts raw UN/LOCODE CSV files (Latin-1 encoded) into a compact data.json.
+ *
+ * CSV columns (0-indexed, no header row):
+ *   [00] change indicator
+ *   [01] country
+ *   [02] location
+ *   [03] name (diacritics)
+ *   [04] name (ASCII)
+ *   [05] subdivision
+ *   [06] function classifier
+ *   [07] status
+ *   [08] date
+ *   [09] IATA code
+ *   [10] coordinates
+ *
+ * Rows with change indicator "=" are reference entries (exonym ↔ local name mappings).
+ */
 import { readdir, readFile, writeFile } from 'node:fs/promises';
 import path from 'node:path';
 import { parse } from 'csv-parse/sync';
@@ -19,6 +37,10 @@ type FunctionClassifier = {
   code: UnlocodeFunctionCode;
 };
 
+/**
+ * Maps function classifier string positions to typed function codes.
+ * Position 7 accepts both 'B' and '8' for border crossing (legacy encoding).
+ */
 const FUNCTION_CLASSIFIERS: FunctionClassifier[] = [
   { index: 0, symbol: '1', code: 'port' },
   { index: 1, symbol: '2', code: 'rail_terminal' },
@@ -33,6 +55,10 @@ const FUNCTION_CLASSIFIERS: FunctionClassifier[] = [
 const KNOWN_STATUS_CODES = new Set<string>(UnlocodeStatusCodeSchema.options);
 const KNOWN_FUNCTION_CODES = new Set<string>(UnlocodeFunctionCodeSchema.options);
 
+/**
+ * Parses a "DDMMhDDDMMh" coordinate string into decimal lat/lon.
+ * Returns null if the value is absent or does not match the expected format.
+ */
 function parseCoordinates(value: string): UnlocodeEntry['coordinates'] {
   const compact = value.toUpperCase().replace(/\s+/g, '');
   if (!compact) return null;
@@ -60,6 +86,10 @@ function parseCoordinates(value: string): UnlocodeEntry['coordinates'] {
   };
 }
 
+/**
+ * Scans src/data/raw/ for versioned Part1 CSVs and returns the most recent
+ * release string (e.g. "2024-2"), or undefined if none are found.
+ */
 async function detectLatestRelease(rawDir: string): Promise<string | undefined> {
   const releasePattern = /^(\d{4})-(\d)\s+UNLOCODE CodeListPart1\.csv$/;
   const files = await readdir(rawDir);
@@ -79,6 +109,10 @@ async function detectLatestRelease(rawDir: string): Promise<string | undefined> 
   return releases.at(-1)?.text;
 }
 
+/**
+ * Decodes the 8-character function classifier string into typed function codes.
+ * Unknown characters are collected for a warning but do not abort the build.
+ */
 function parseFunctions(classifier: string, unknownClassifiers: Set<string>): UnlocodeFunctionCode[] {
   const result: UnlocodeFunctionCode[] = [];
   const normalized = classifier.padEnd(8, '-').slice(0, 8).toUpperCase();
@@ -113,9 +147,13 @@ async function main() {
     `${selectedRelease} UNLOCODE CodeListPart3.csv`,
   ];
 
+  // Last-write wins across the three CSV parts: later parts may update or supersede earlier entries.
   const entriesByCode = new Map<string, DataEntry>();
   const unknownStatuses = new Set<string>();
   const unknownClassifiers = new Set<string>();
+  // Reference rows (change indicator "=") link exonyms/historic names to current local names.
+  // Collected in a first pass; resolved against entriesByCode in a second pass below.
+  const referenceRows: { country: string; raw3: string; raw4: string }[] = [];
 
   const clean = (value: string | undefined): string => (value ?? '').trim();
 
@@ -131,6 +169,17 @@ async function main() {
     }) as string[][];
 
     for (const row of rows) {
+      // Reference entry: maps an exonym or historic name to a current local name.
+      // Captured for the second pass; not a locatable entry itself.
+      if (clean(row[0]) === '=') {
+        const refCountry = clean(row[1]).toUpperCase();
+        const raw4 = clean(row[4]);
+        const raw3 = clean(row[3]);
+        if (refCountry && (raw3.includes(' = ') || raw4.includes(' = ')))
+          referenceRows.push({ country: refCountry, raw3, raw4 });
+        continue;
+      }
+
       const country = clean(row[1]).toUpperCase();
       const location = clean(row[2]).toUpperCase();
       const name = clean(row[4] || row[3]);
@@ -170,6 +219,33 @@ async function main() {
     throw new Error(
       `Found unknown status codes in raw data: ${Array.from(unknownStatuses).sort().join(', ')}. Update status schema first.`,
     );
+  }
+
+  // Second pass: resolve reference rows and attach exonyms to their entries.
+  // name is always ASCII (row[4]) so the index key uses the ASCII local name.
+  const nameIndex = new Map<string, string>(); // "COUNTRY:name" → code
+  for (const [code, entry] of entriesByCode) {
+    nameIndex.set(`${entry.country}:${entry.name}`, code);
+  }
+  for (const { country, raw3, raw4 } of referenceRows) {
+    const sepIdx = raw4.indexOf(' = ');
+    if (sepIdx === -1) continue;
+    const localName = raw4
+      .slice(sepIdx + 3)
+      .trim()
+      .replace(/\s*\(.*\)$/, '')
+      .trim();
+    const code = nameIndex.get(`${country}:${localName}`);
+    if (!code) continue;
+    const entry = entriesByCode.get(code)!;
+    // Both raw4 (ASCII) and raw3 (diacritics) may carry distinct exonyms on the left of " = ".
+    // Deduplicate so identical forms (e.g. "Copenhagen" in both columns) are stored only once.
+    const candidates = [raw4, raw3].map((raw) => raw.slice(0, raw.indexOf(' = ')).trim());
+    const newExonyms = [...new Set(candidates)].filter(Boolean);
+    if (!entry.exonyms) entry.exonyms = [];
+    for (const exonym of newExonyms) {
+      if (!entry.exonyms.includes(exonym)) entry.exonyms.push(exonym);
+    }
   }
 
   const entries = Array.from(entriesByCode.values()).sort((a, b) => {

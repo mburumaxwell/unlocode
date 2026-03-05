@@ -1,9 +1,18 @@
+/**
+ * Downloads the latest UN/LOCODE release CSV files from the UNECE service.
+ * Probes for the most recent year/issue combination, then saves the three
+ * CodeList part files and the SubdivisionCodes file to src/data/raw/.
+ */
 import { mkdir, writeFile } from 'node:fs/promises';
 import path from 'node:path';
 
 const RAW_DIR = path.join(process.cwd(), 'src/data/raw');
 const BASE_URL = 'https://service.unece.org/trade/locode/';
 
+/**
+ * Checks whether a given release (e.g. "2024-2") exists on the UNECE server.
+ * Falls back from HEAD to GET for servers that return 405 on HEAD requests.
+ */
 async function releaseExists(baseUrl: string, release: string): Promise<boolean> {
   const fileName = `${release} UNLOCODE CodeListPart1.csv`;
   const url = new URL(encodeURIComponent(fileName), baseUrl).toString();
@@ -20,6 +29,10 @@ async function releaseExists(baseUrl: string, release: string): Promise<boolean>
   }
 }
 
+/**
+ * Probes backwards from next year to 15 years ago, returning the first
+ * release string found (e.g. "2024-2"), or undefined if none exist.
+ */
 async function detectLatestRelease(baseUrl: string): Promise<string | undefined> {
   const currentYear = new Date().getUTCFullYear();
   const latestYearToTry = currentYear + 1;

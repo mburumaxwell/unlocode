@@ -259,6 +259,11 @@ function UnlocodeDetail({ entry }: { entry: UnlocodeEntry }) {
       </div>
 
       <div className='space-y-0.5 col-span-2'>
+        <dt className='text-xs font-medium uppercase tracking-wider text-muted-foreground'>Also known as</dt>
+        <dd>{entry.exonyms?.join(', ') ?? '-'}</dd>
+      </div>
+
+      <div className='space-y-0.5 col-span-3'>
         <dt className='inline-flex items-center gap-1 text-xs font-medium uppercase tracking-wider text-muted-foreground'>
           <MapPinIcon className='size-3' />
           Coordinates

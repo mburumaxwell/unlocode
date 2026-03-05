@@ -35,7 +35,7 @@ export default async function ViewLocodePage(props: PageProps<'/view/[code]'>) {
     <main className='min-h-[calc(100vh-3.5rem)]'>
       <div className='mx-auto max-w-2xl px-4 py-8'>
         <div className='mb-6 flex items-start gap-3'>
-          <CountryFlag countryCode={entry.country} className='mt-1 size-6' shape='circle' />
+          <CountryFlag countryCode={entry.country} className='size-6' shape='circle' />
           <div>
             <p className='font-mono text-xs text-muted-foreground mb-1'>{entry.code}</p>
             <h1 className='text-xl font-semibold tracking-tight text-foreground'>
@@ -80,6 +80,14 @@ function UnlocodeDetailPanel({ entry }: { entry: UnlocodeEntry }) {
           },
         ]
       : []),
+    ...(entry.exonyms && entry.exonyms.length > 0
+      ? [
+          {
+            label: 'Also known as',
+            content: <span>{entry.exonyms.join(', ')}</span>,
+          },
+        ]
+      : []),
     {
       label: 'UN/LOCODE',
       content: (
@@ -95,13 +103,17 @@ function UnlocodeDetailPanel({ entry }: { entry: UnlocodeEntry }) {
         <span className='flex items-center gap-2'>
           <CountryFlag countryCode={entry.country} className='size-4' shape='circle' />
           <span>{country?.name ?? entry.country}</span>
-          <span className='font-mono text-xs text-muted-foreground'>{entry.country}</span>
+          <span className='font-mono text-muted-foreground'>({entry.country})</span>
         </span>
       ),
     },
     {
       label: 'Location Code',
       content: <span className='font-mono text-sm'>{entry.location}</span>,
+    },
+    {
+      label: 'Subdivision',
+      content: <span className='font-mono text-sm'>{entry.subdivision}</span>,
     },
     {
       label: 'Status',

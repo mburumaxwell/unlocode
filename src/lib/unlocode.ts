@@ -56,6 +56,7 @@ export const UnlocodeEntrySchema = z.object({
   functions: UnlocodeFunctionCodeSchema.array(), // e.g. ["port", "airport", "postal_exchange"]
   status: UnlocodeStatusCodeSchema, // e.g. "AA"
   iata: z.string().optional(), // e.g. "ABZ" — IATA location code; omitted when absent in source data
+  exonyms: z.array(z.string()).optional(), // e.g. ["Copenhagen"] — foreign/historic names from UN/LOCODE reference entries
   coordinates: z.object({ lat: z.number(), lon: z.number() }).nullable(), // e.g. { lat: 40.7, lon: -74.0 }
 });
 export type UnlocodeEntry = z.infer<typeof UnlocodeEntrySchema>;

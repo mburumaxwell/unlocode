@@ -54,6 +54,17 @@ describe('data/index', () => {
     expect(new Date(meta.generatedAt).toString()).not.toBe('Invalid Date');
   });
 
+  it('stores exonyms for DKCPH (Copenhagen)', () => {
+    const entry = getEntryByCode('DKCPH');
+    expect(entry).toBeDefined();
+    expect(entry?.exonyms).toContain('Copenhagen');
+  });
+
+  it('searches by exonym', () => {
+    const { results } = searchUnlocodeDatabase({ query: 'Copenhagen' });
+    expect(results.some((r) => r.code === 'DKCPH')).toBe(true);
+  });
+
   it('stores correct iata for GBABD (Aberdeen)', () => {
     const entry = getEntryByCode('GBABD');
     expect(entry).toBeDefined();
