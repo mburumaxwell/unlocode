@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { GET, OPTIONS } from './[route]/route';
+import { GET, OPTIONS } from './route';
 
 function makeRequest(path: string, init?: RequestInit): Request {
   return new Request(`http://localhost:3000/api/unlocode${path}`, init);
