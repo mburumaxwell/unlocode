@@ -1,4 +1,5 @@
 import { fileURLToPath } from 'node:url';
+
 import { loadEnv } from 'vite';
 import { configDefaults, defineConfig } from 'vitest/config';
 

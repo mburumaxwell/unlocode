@@ -16,9 +16,11 @@
  *
  * Rows with change indicator "=" are reference entries (exonym ↔ local name mappings).
  */
-import { readdir, readFile, writeFile } from 'node:fs/promises';
+import { readFile, readdir, writeFile } from 'node:fs/promises';
 import path from 'node:path';
+
 import { parse } from 'csv-parse/sync';
+
 import {
   type UnlocodeEntry,
   type UnlocodeFunctionCode,

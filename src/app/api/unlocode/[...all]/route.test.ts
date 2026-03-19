@@ -1,4 +1,5 @@
 import { describe, expect, it } from 'vitest';
+
 import { GET, OPTIONS } from './route';
 
 function makeRequest(path: string, init?: RequestInit): Request {

@@ -5,6 +5,7 @@ import type { Route } from 'next';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import * as React from 'react';
+
 import { GithubIcon } from '@/components/logos';
 import { ThemeButton } from '@/components/theme';
 import { Button } from '@/components/ui/button';
@@ -28,7 +29,7 @@ export function Header() {
           unlocode/
         </Link>
 
-        <nav className='hidden md:flex items-center gap-1 overflow-x-auto' aria-label='Main navigation'>
+        <nav className='hidden items-center gap-1 overflow-x-auto md:flex' aria-label='Main navigation'>
           {NAV_ITEMS.map(({ href, label }) => {
             const active = pathname.startsWith(href);
             return (
@@ -37,7 +38,7 @@ export function Header() {
                 href={href as Route}
                 className={cn(
                   'shrink-0 rounded-md px-2.5 py-1 text-sm transition-colors',
-                  active ? 'text-foreground font-medium' : 'text-muted-foreground hover:text-foreground',
+                  active ? 'font-medium text-foreground' : 'text-muted-foreground hover:text-foreground',
                 )}
               >
                 {label}
@@ -59,7 +60,7 @@ export function Header() {
               target='_blank'
               rel='noreferrer'
               aria-label='Open GitHub repository'
-              className='gap-2 flex items-center'
+              className='flex items-center gap-2'
             >
               <GithubIcon className='size-4' />
               <span>GitHub</span>
@@ -73,7 +74,7 @@ export function Header() {
           >
             <MenuIcon />
           </SheetTrigger>
-          <SheetContent side='right' className='md:hidden p-3'>
+          <SheetContent side='right' className='p-3 md:hidden'>
             <nav className='mt-10 flex flex-col gap-1' aria-label='Mobile navigation'>
               {NAV_ITEMS.map(({ href, label }) => {
                 const active = pathname.startsWith(href);
@@ -83,7 +84,7 @@ export function Header() {
                     href={href as Route}
                     className={cn(
                       'rounded-md px-3 py-2 text-sm transition-colors',
-                      active ? 'bg-accent text-foreground font-medium' : 'text-muted-foreground hover:text-foreground',
+                      active ? 'bg-accent font-medium text-foreground' : 'text-muted-foreground hover:text-foreground',
                     )}
                     onClick={() => setMobileOpen(false)}
                   >
@@ -101,7 +102,7 @@ export function Header() {
                     href='https://github.com/mburumaxwell/unlocode'
                     target='_blank'
                     rel='noreferrer'
-                    className='gap-2 flex items-center'
+                    className='flex items-center gap-2'
                     onClick={() => setMobileOpen(false)}
                   >
                     <GithubIcon className='size-4' />

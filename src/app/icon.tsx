@@ -1,4 +1,5 @@
 import { ImageResponse } from 'next/og';
+
 import { UnlocodeIconOpenGraph } from '@/components/og-image';
 
 export const size = { width: 32, height: 32 };

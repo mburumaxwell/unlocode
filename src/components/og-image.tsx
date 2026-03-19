@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+
 import { UnlocodeIcon } from '@/components/logos';
 import { config } from '@/lib/site';
 import { cn } from '@/lib/utils';
@@ -10,14 +11,8 @@ import { cn } from '@/lib/utils';
  * @param props - Additional props to be spread onto the wrapper div element.
  * @returns The wrapped Open Graph image component.
  */
-export function OpenGraphImageWrapper({
-  children,
-  style,
-  className,
-  tw,
-  ...props
-}: React.ComponentPropsWithoutRef<'div'>) {
-  const resolvedClassName = cn('h-full w-full flex items-center justify-center', className, tw);
+export function OpenGraphImageWrapper({ children, className, tw, ...props }: React.ComponentPropsWithoutRef<'div'>) {
+  const resolvedClassName = cn('flex h-full w-full items-center justify-center', className, tw);
   return (
     <div className={resolvedClassName} tw={resolvedClassName} {...props}>
       {children}
@@ -54,7 +49,7 @@ export function OpenGraphImageMarketing({ style, className, tw, ...props }: Open
   }
 
   const resolvedClassName = cn(
-    'h-full w-full flex flex-row items-center justify-center bg-[#0a0a0a] p-20 text-white',
+    'flex h-full w-full flex-row items-center justify-center bg-[#0a0a0a] p-20 text-white',
     className,
     tw,
   );

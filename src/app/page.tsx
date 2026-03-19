@@ -1,6 +1,7 @@
 import { ArrowRightIcon, ExternalLinkIcon } from 'lucide-react';
 import type { Route } from 'next';
 import Link from 'next/link';
+
 import { CodeBlock } from '@/components/code-block';
 import { config } from '@/lib/site';
 
@@ -16,27 +17,27 @@ curl "${config.siteUrl}/api/unlocode/NLRTM"`;
       <div className='mx-auto max-w-2xl px-4 py-16'>
         {/* Hero */}
         <header className='mb-14'>
-          <p className='font-mono text-xs text-muted-foreground mb-3'>unlocode/</p>
-          <h1 className='text-2xl font-semibold tracking-tight text-foreground text-balance mb-4'>
+          <p className='mb-3 font-mono text-xs text-muted-foreground'>unlocode/</p>
+          <h1 className='mb-4 text-2xl font-semibold tracking-tight text-balance text-foreground'>
             Search, API, and React components for UN/LOCODE
           </h1>
-          <p className='text-sm text-muted-foreground leading-relaxed max-w-lg'>
+          <p className='max-w-lg text-sm leading-relaxed text-muted-foreground'>
             An open-source toolkit for the{' '}
             <a
               href='https://unece.org/trade/cefact/unlocode-code-list-country-and-territory'
               target='_blank'
               rel='noopener noreferrer'
-              className='underline underline-offset-2 hover:text-foreground transition-colors'
+              className='underline underline-offset-2 transition-colors hover:text-foreground'
             >
               United Nations Code for Trade and Transport Locations
-              <ExternalLinkIcon className='inline-block size-3 ml-0.5 -translate-y-px' />
+              <ExternalLinkIcon className='ml-0.5 inline-block size-3 -translate-y-px' />
             </a>
             . Search the full dataset, call the REST API from any client, or drop the React component into your forms.
           </p>
         </header>
 
         {/* Navigation */}
-        <nav className='flex flex-col gap-px rounded-lg border overflow-hidden mb-14' aria-label='Sections'>
+        <nav className='mb-14 flex flex-col gap-px overflow-hidden rounded-lg border' aria-label='Sections'>
           <NavRow
             href='/search'
             title='Search'
@@ -56,23 +57,23 @@ curl "${config.siteUrl}/api/unlocode/NLRTM"`;
 
         {/* What is UN/LOCODE */}
         <section className='mb-12'>
-          <h2 className='text-sm font-semibold text-foreground mb-3'>What is UN/LOCODE?</h2>
-          <p className='text-sm text-muted-foreground leading-relaxed mb-3'>
+          <h2 className='mb-3 text-sm font-semibold text-foreground'>What is UN/LOCODE?</h2>
+          <p className='mb-3 text-sm leading-relaxed text-muted-foreground'>
             UN/LOCODE is a geographic coding scheme maintained by the{' '}
             <a
               href='https://unece.org/trade/uncefact'
               target='_blank'
               rel='noopener noreferrer'
-              className='underline underline-offset-2 hover:text-foreground transition-colors'
+              className='underline underline-offset-2 transition-colors hover:text-foreground'
             >
               United Nations Economic Commission for Europe (UNECE)
-              <ExternalLinkIcon className='inline-block size-3 ml-0.5 -translate-y-px' />
+              <ExternalLinkIcon className='ml-0.5 inline-block size-3 -translate-y-px' />
             </a>
             . It assigns a unique 5-character code to locations across 249 countries and territories that are
             significant for international trade and transport: ports, airports, rail terminals, road terminals, postal
             exchange offices, inland clearance depots, and border crossings.
           </p>
-          <p className='text-sm text-muted-foreground leading-relaxed mb-3'>
+          <p className='mb-3 text-sm leading-relaxed text-muted-foreground'>
             The code format is{' '}
             <code className='rounded bg-muted px-1.5 py-0.5 font-mono text-xs text-foreground'>CC LOC</code> where{' '}
             <code className='rounded bg-muted px-1.5 py-0.5 font-mono text-xs text-foreground'>CC</code> is the ISO
@@ -83,16 +84,16 @@ curl "${config.siteUrl}/api/unlocode/NLRTM"`;
             and <code className='rounded bg-muted px-1.5 py-0.5 font-mono text-xs text-foreground'>NLRTM</code> is
             Rotterdam.
           </p>
-          <p className='text-sm text-muted-foreground leading-relaxed'>
+          <p className='text-sm leading-relaxed text-muted-foreground'>
             The official dataset is published at{' '}
             <a
               href='https://unece.org/trade/cefact/unlocode-code-list-country-and-territory'
               target='_blank'
               rel='noopener noreferrer'
-              className='underline underline-offset-2 hover:text-foreground transition-colors'
+              className='underline underline-offset-2 transition-colors hover:text-foreground'
             >
               unece.org
-              <ExternalLinkIcon className='inline-block size-3 ml-0.5 -translate-y-px' />
+              <ExternalLinkIcon className='ml-0.5 inline-block size-3 -translate-y-px' />
             </a>{' '}
             and is updated several times per year.
           </p>
@@ -100,7 +101,7 @@ curl "${config.siteUrl}/api/unlocode/NLRTM"`;
 
         {/* How it works */}
         <section className='mb-12'>
-          <h2 className='text-sm font-semibold text-foreground mb-3'>How this toolkit works</h2>
+          <h2 className='mb-3 text-sm font-semibold text-foreground'>How this toolkit works</h2>
           <div className='flex flex-col gap-5'>
             <Detail
               title='API'
@@ -134,11 +135,11 @@ curl "${config.siteUrl}/api/unlocode/NLRTM"`;
 
         {/* Quick start */}
         <section className='mb-14'>
-          <h2 className='text-sm font-semibold text-foreground mb-3'>Quick start</h2>
+          <h2 className='mb-3 text-sm font-semibold text-foreground'>Quick start</h2>
           <CodeBlock code={quickStartExample} language='bash' />
         </section>
 
-        <footer className='border-t pt-6 flex flex-col gap-2 text-xs text-muted-foreground'>
+        <footer className='flex flex-col gap-2 border-t pt-6 text-xs text-muted-foreground'>
           <p>
             This app uses the official UNECE UN/LOCODE dataset generated from source CSV files and refreshed by
             automation.
@@ -149,10 +150,10 @@ curl "${config.siteUrl}/api/unlocode/NLRTM"`;
               href='https://github.com/mburumaxwell/unlocode/blob/main/LICENSE'
               target='_blank'
               rel='noopener noreferrer'
-              className='underline underline-offset-2 hover:text-foreground transition-colors'
+              className='underline underline-offset-2 transition-colors hover:text-foreground'
             >
               GNU AGPL v3.0
-              <ExternalLinkIcon className='inline-block size-3 ml-0.5 -translate-y-px' />
+              <ExternalLinkIcon className='ml-0.5 inline-block size-3 -translate-y-px' />
             </a>
           </p>
           <p>
@@ -161,10 +162,10 @@ curl "${config.siteUrl}/api/unlocode/NLRTM"`;
               href='https://unece.org/trade/cefact/unlocode-code-list-country-and-territory'
               target='_blank'
               rel='noopener noreferrer'
-              className='underline underline-offset-2 hover:text-foreground transition-colors'
+              className='underline underline-offset-2 transition-colors hover:text-foreground'
             >
               UNECE UN/LOCODE
-              <ExternalLinkIcon className='inline-block size-3 ml-0.5 -translate-y-px' />
+              <ExternalLinkIcon className='ml-0.5 inline-block size-3 -translate-y-px' />
             </a>
           </p>
         </footer>
@@ -177,13 +178,13 @@ function NavRow({ href, title, description }: { href: Route; title: string; desc
   return (
     <Link
       href={href}
-      className='group flex items-center justify-between gap-4 px-4 py-3 bg-card hover:bg-accent/50 transition-colors'
+      className='group flex items-center justify-between gap-4 bg-card px-4 py-3 transition-colors hover:bg-accent/50'
     >
       <div className='min-w-0'>
         <p className='text-sm font-medium text-foreground'>{title}</p>
-        <p className='text-xs text-muted-foreground mt-0.5'>{description}</p>
+        <p className='mt-0.5 text-xs text-muted-foreground'>{description}</p>
       </div>
-      <ArrowRightIcon className='size-4 text-muted-foreground shrink-0 transition-transform group-hover:translate-x-0.5' />
+      <ArrowRightIcon className='size-4 shrink-0 text-muted-foreground transition-transform group-hover:translate-x-0.5' />
     </Link>
   );
 }
@@ -191,11 +192,11 @@ function NavRow({ href, title, description }: { href: Route; title: string; desc
 function Detail({ title, items }: { title: string; items: string[] }) {
   return (
     <div>
-      <h3 className='font-mono text-xs font-medium text-foreground mb-1.5'>{title}</h3>
+      <h3 className='mb-1.5 font-mono text-xs font-medium text-foreground'>{title}</h3>
       <ul className='flex flex-col gap-1'>
         {items.map((item) => (
           <li key={item} className='flex gap-2 text-sm text-muted-foreground'>
-            <span className='text-muted-foreground/40 select-none shrink-0'>--</span>
+            <span className='shrink-0 text-muted-foreground/40 select-none'>--</span>
             <span>{item}</span>
           </li>
         ))}

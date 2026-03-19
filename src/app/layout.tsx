@@ -3,8 +3,10 @@ import { SpeedInsights } from '@vercel/speed-insights/next';
 import type { Metadata } from 'next';
 import type { TemplateString } from 'next/dist/lib/metadata/types/metadata-types';
 import { Geist, Geist_Mono } from 'next/font/google';
+
 import { ThemeProvider } from '@/components/theme';
 import { config } from '@/lib/site';
+
 import { Header } from './layout.client';
 
 import './globals.css';

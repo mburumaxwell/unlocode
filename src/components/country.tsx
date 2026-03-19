@@ -1,7 +1,8 @@
 'use client';
 
-import { cva, type VariantProps } from 'class-variance-authority';
+import { type VariantProps, cva } from 'class-variance-authority';
 import { GlobeIcon } from 'lucide-react';
+
 import {
   Combobox,
   ComboboxContent,
@@ -13,7 +14,7 @@ import {
   ComboboxValue,
   useComboboxAnchor,
 } from '@/components/ui/combobox';
-import { countries as allCountries, type CountryInfo } from '@/lib/countries';
+import { type CountryInfo, countries as allCountries } from '@/lib/countries';
 import { cn } from '@/lib/utils';
 
 // partly inspired by https://shadcn-country-dropdown.vercel.app
@@ -46,7 +47,8 @@ const countryComboboxVariants = cva(
 );
 
 export interface CountryComboboxProps
-  extends Omit<
+  extends
+    Omit<
       React.ComponentProps<typeof Combobox<CountryOption>>,
       'items' | 'itemToStringValue' | 'value' | 'onValueChange'
     >,
@@ -171,7 +173,7 @@ export function CountryFlag({ countryCode, shape = 'rect', className, ...props }
   const src = `https://cdn.jsdelivr.net/gh/lipis/flag-icons/flags/${ratioPath}/${code.toLowerCase()}.svg`;
 
   return (
-    // biome-ignore lint/performance/noImgElement: next/image improvement is negligible here and adds complexity
+    // oxlint-disable-next-line nextjs/no-img-element -- next/image improvement is negligible here and adds complexity
     <img
       src={src}
       alt={title}
@@ -194,8 +196,7 @@ export function CountryFlag({ countryCode, shape = 'rect', className, ...props }
 }
 
 export interface CountryFlagEmojiProps
-  extends Pick<CountryFlagProps, 'countryCode'>,
-    Omit<React.ComponentProps<'span'>, 'children'> {}
+  extends Pick<CountryFlagProps, 'countryCode'>, Omit<React.ComponentProps<'span'>, 'children'> {}
 
 /** Renders a country flag as an emoji using Unicode regional indicator symbols. */
 export function CountryFlagEmoji({ countryCode, ...props }: CountryFlagEmojiProps) {

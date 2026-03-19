@@ -1,4 +1,5 @@
 import type { UnlocodeEntry, UnlocodeFunctionCode } from '@/lib/unlocode';
+
 import locations from './data.json';
 import meta from './data.meta.json';
 

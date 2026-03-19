@@ -20,15 +20,17 @@ updates:
           - 'next'
           - 'react'
           - 'react-dom'
+      oxc: { patterns: ['oxfmt', 'oxlint'] }
       all-npm-minor-updates:
         patterns: ['*']
         exclude-patterns:
-          - '@biomejs/biome'
           - '@types/react'
           - '@types/react-dom'
           - 'next'
           - 'react'
           - 'react-dom'
+          - 'oxfmt'
+          - 'oxlint'
         update-types:
           - minor
           - patch

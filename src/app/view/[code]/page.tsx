@@ -1,6 +1,7 @@
 import { ExternalLinkIcon, MapPinIcon } from 'lucide-react';
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
+
 import { CopyButton } from '@/components/copy-button';
 import { CountryFlag } from '@/components/country';
 import { Badge } from '@/components/ui/badge';
@@ -37,7 +38,7 @@ export default async function ViewLocodePage(props: PageProps<'/view/[code]'>) {
         <div className='mb-6 flex items-start gap-3'>
           <CountryFlag countryCode={entry.country} className='size-6' shape='circle' />
           <div>
-            <p className='font-mono text-xs text-muted-foreground mb-1'>{entry.code}</p>
+            <p className='mb-1 font-mono text-xs text-muted-foreground'>{entry.code}</p>
             <h1 className='text-xl font-semibold tracking-tight text-foreground'>
               {entry.name}
               {entry.subdivision && (
@@ -57,7 +58,7 @@ export default async function ViewLocodePage(props: PageProps<'/view/[code]'>) {
           </div>
         </div>
 
-        <div className='rounded-lg border overflow-hidden'>
+        <div className='overflow-hidden rounded-lg border'>
           <UnlocodeDetailPanel entry={entry} />
         </div>
       </div>
@@ -161,7 +162,7 @@ function UnlocodeDetailPanel({ entry }: { entry: UnlocodeEntry }) {
             href={mapsLink}
             target='_blank'
             rel='noreferrer noopener'
-            className='inline-flex items-center gap-1 text-sm text-primary hover:underline underline-offset-4'
+            className='inline-flex items-center gap-1 text-sm text-primary underline-offset-4 hover:underline'
           >
             <MapPinIcon className='size-3.5' />
             Open in Google Maps
@@ -178,7 +179,7 @@ function UnlocodeDetailPanel({ entry }: { entry: UnlocodeEntry }) {
     <dl className='divide-y divide-border'>
       {rows.map(({ label, content }) => (
         <div key={label} className='flex items-center gap-4 px-4 py-3'>
-          <dt className='w-32 shrink-0 text-xs font-medium uppercase tracking-wider text-muted-foreground'>{label}</dt>
+          <dt className='w-32 shrink-0 text-xs font-medium tracking-wider text-muted-foreground uppercase'>{label}</dt>
           <dd className='min-w-0 flex-1 text-sm text-foreground'>{content}</dd>
         </div>
       ))}

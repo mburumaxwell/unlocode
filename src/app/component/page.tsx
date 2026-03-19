@@ -5,6 +5,7 @@ import { CheckCircle2Icon } from 'lucide-react';
 import * as React from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { z } from 'zod';
+
 import { CodeBlock } from '@/components/code-block';
 import { CountryFlag } from '@/components/country';
 import { Button } from '@/components/ui/button';
@@ -92,7 +93,7 @@ export default function ComponentPage() {
             </CardHeader>
             <CardContent>
               <form onSubmit={form.handleSubmit(handleSubmit)}>
-                <FieldGroup className='grid md:grid-cols-2 gap-2'>
+                <FieldGroup className='grid gap-2 md:grid-cols-2'>
                   <Controller
                     name='reference'
                     control={form.control}
@@ -180,10 +181,10 @@ export default function ComponentPage() {
             <Card size='sm' className='rounded-md'>
               <CardContent>
                 <div className='flex items-start gap-3'>
-                  <CheckCircle2Icon className='size-5 text-foreground shrink-0 mt-0.5' />
+                  <CheckCircle2Icon className='mt-0.5 size-5 shrink-0 text-foreground' />
                   <div className='flex flex-col gap-2 text-sm'>
                     <p className='font-medium text-foreground'>Shipment booked</p>
-                    <div className='rounded-md bg-muted p-3 font-mono text-xs flex flex-col gap-1'>
+                    <div className='flex flex-col gap-1 rounded-md bg-muted p-3 font-mono text-xs'>
                       <span>reference: {submitted.reference || '(none)'}</span>
                       <span>origin: {submitted.origin}</span>
                       <span>destination: {submitted.destination}</span>
@@ -197,11 +198,11 @@ export default function ComponentPage() {
           <Separator />
 
           <section>
-            <h2 className='text-sm font-semibold text-foreground mb-3'>Standalone examples</h2>
-            <p className='text-sm text-muted-foreground mb-4'>
+            <h2 className='mb-3 text-sm font-semibold text-foreground'>Standalone examples</h2>
+            <p className='mb-4 text-sm text-muted-foreground'>
               The selector in different states to illustrate selection and clearing.
             </p>
-            <div className='grid md:grid-cols-2 gap-6'>
+            <div className='grid gap-6 md:grid-cols-2'>
               <UnlocodeInputWithSummary label='Default (empty)' />
               <UnlocodeInputWithSummary label='Pre-selected' value='SGSIN' />
               <UnlocodeInputWithSummary label='Ports and Airports only' functions={['port', 'airport']} />
@@ -225,7 +226,7 @@ export default function ComponentPage() {
               href='https://github.com/mburumaxwell/unlocode/blob/main/src/components/unlocode-input.tsx'
               target='_blank'
               rel='noreferrer noopener'
-              className='w-fit text-sm text-primary hover:underline underline-offset-4'
+              className='w-fit text-sm text-primary underline-offset-4 hover:underline'
             >
               View component source on GitHub
             </a>
@@ -238,7 +239,7 @@ export default function ComponentPage() {
 
 function SelectedSummary({ entry }: { entry: UnlocodeEntry }) {
   return (
-    <div className='flex items-center gap-2 text-xs text-muted-foreground px-1 py-0.5'>
+    <div className='flex items-center gap-2 px-1 py-0.5 text-xs text-muted-foreground'>
       <CountryFlag countryCode={entry.country} className='size-3' shape='circle' />
       <span className='font-mono font-medium'>{entry.code}</span>
       <span>{entry.name}</span>
@@ -276,7 +277,7 @@ function UnlocodeInputWithSummary({
         }}
       />
       {entry && <SelectedSummary entry={entry} />}
-      <span className='text-xs text-muted-foreground font-mono px-1'>value = {value ? `"${value}"` : 'null'}</span>
+      <span className='px-1 font-mono text-xs text-muted-foreground'>value = {value ? `"${value}"` : 'null'}</span>
     </div>
   );
 }

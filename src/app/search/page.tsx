@@ -2,6 +2,7 @@
 
 import { ChevronDownIcon, ExternalLinkIcon, MapPinIcon, SearchIcon, XIcon } from 'lucide-react';
 import * as React from 'react';
+
 import { CopyButton } from '@/components/copy-button';
 import { CountryCombobox, CountryFlag } from '@/components/country';
 import { Badge } from '@/components/ui/badge';
@@ -82,7 +83,7 @@ export default function SearchPage() {
                 <button
                   type='button'
                   onClick={() => setCountry(null)}
-                  className='inline-flex items-center gap-1 rounded-full bg-secondary px-2 py-0.5 text-secondary-foreground hover:bg-secondary/80 transition-colors'
+                  className='inline-flex items-center gap-1 rounded-full bg-secondary px-2 py-0.5 text-secondary-foreground transition-colors hover:bg-secondary/80'
                 >
                   <CountryFlag countryCode={country} className='size-2' /> {country}
                   <XIcon className='size-3' />
@@ -95,7 +96,7 @@ export default function SearchPage() {
                     key={fc}
                     type='button'
                     onClick={() => setFunctions(functions.filter((f) => f !== fc))}
-                    className='inline-flex items-center gap-1 rounded-full bg-secondary px-2 py-0.5 text-secondary-foreground hover:bg-secondary/80 transition-colors'
+                    className='inline-flex items-center gap-1 rounded-full bg-secondary px-2 py-0.5 text-secondary-foreground transition-colors hover:bg-secondary/80'
                   >
                     {fn?.label ?? fc}
                     <XIcon className='size-3' />
@@ -144,7 +145,7 @@ function ResultsList({
 
   if (isLoading && results.length === 0) {
     return (
-      <div className='flex items-center justify-center py-12 gap-2 text-muted-foreground'>
+      <div className='flex items-center justify-center gap-2 py-12 text-muted-foreground'>
         <Spinner />
         <span className='text-sm'>Searching...</span>
       </div>
@@ -154,7 +155,7 @@ function ResultsList({
   if (results.length === 0) {
     return (
       <div className='flex flex-col items-center justify-center py-12 text-center'>
-        <MapPinIcon className='size-10 text-muted-foreground/30 mb-3' />
+        <MapPinIcon className='mb-3 size-10 text-muted-foreground/30' />
         <p className='text-sm text-muted-foreground'>
           {hasFilters ? 'No locations match your filters.' : 'Start typing or select a country to search.'}
         </p>
@@ -170,7 +171,7 @@ function ResultsList({
         </span>
         {isValidating && <Spinner className='size-3' />}
       </div>
-      <div className='divide-y divide-border rounded-lg border overflow-hidden'>
+      <div className='divide-y divide-border overflow-hidden rounded-lg border'>
         {results.map((entry) => {
           const isOpen = openCodes.includes(entry.code);
 
@@ -228,24 +229,24 @@ function UnlocodeDetail({ entry }: { entry: UnlocodeEntry }) {
   return (
     <dl className='grid grid-cols-2 gap-x-4 gap-y-2 text-sm lg:grid-cols-5'>
       <div className='space-y-0.5'>
-        <dt className='text-xs font-medium uppercase tracking-wider text-muted-foreground'>Status</dt>
+        <dt className='text-xs font-medium tracking-wider text-muted-foreground uppercase'>Status</dt>
         <Badge variant='outline' className='w-fit font-mono text-[10px]'>
           {entry.status}
         </Badge>
       </div>
 
       <div className='min-w-0 space-y-0.5'>
-        <dt className='text-xs font-medium uppercase tracking-wider text-muted-foreground'>Country</dt>
+        <dt className='text-xs font-medium tracking-wider text-muted-foreground uppercase'>Country</dt>
         <dd className='truncate'>{country?.name ?? entry.country}</dd>
       </div>
 
       <div className='space-y-0.5'>
-        <dt className='text-xs font-medium uppercase tracking-wider text-muted-foreground'>Location Code</dt>
+        <dt className='text-xs font-medium tracking-wider text-muted-foreground uppercase'>Location Code</dt>
         <dd className='font-mono text-xs'>{entry.location}</dd>
       </div>
 
       <div className='space-y-0.5'>
-        <dt className='text-xs font-medium uppercase tracking-wider text-muted-foreground'>UN/LOCODE</dt>
+        <dt className='text-xs font-medium tracking-wider text-muted-foreground uppercase'>UN/LOCODE</dt>
         <dd className='flex items-center gap-1.5'>
           <span className='font-mono text-xs'>{entry.code}</span>
           <CopyButton label='UN/LOCODE' value={entry.code} size='icon-xs' className='size-5' />
@@ -253,18 +254,18 @@ function UnlocodeDetail({ entry }: { entry: UnlocodeEntry }) {
       </div>
 
       <div className='min-w-0 space-y-0.5'>
-        <dt className='text-xs font-medium uppercase tracking-wider text-muted-foreground'>Native Name</dt>
+        <dt className='text-xs font-medium tracking-wider text-muted-foreground uppercase'>Native Name</dt>
         {entry.name_native && <dd>{entry.name_native}</dd>}
         {!entry.name_native && <dd>-</dd>}
       </div>
 
-      <div className='space-y-0.5 col-span-2'>
-        <dt className='text-xs font-medium uppercase tracking-wider text-muted-foreground'>Also known as</dt>
+      <div className='col-span-2 space-y-0.5'>
+        <dt className='text-xs font-medium tracking-wider text-muted-foreground uppercase'>Also known as</dt>
         <dd>{entry.exonyms?.join(', ') ?? '-'}</dd>
       </div>
 
-      <div className='space-y-0.5 col-span-3'>
-        <dt className='inline-flex items-center gap-1 text-xs font-medium uppercase tracking-wider text-muted-foreground'>
+      <div className='col-span-3 space-y-0.5'>
+        <dt className='inline-flex items-center gap-1 text-xs font-medium tracking-wider text-muted-foreground uppercase'>
           <MapPinIcon className='size-3' />
           Coordinates
         </dt>
@@ -277,7 +278,7 @@ function UnlocodeDetail({ entry }: { entry: UnlocodeEntry }) {
               href={mapsLink}
               target='_blank'
               rel='noreferrer noopener'
-              className='inline-flex items-center gap-1 text-xs text-primary hover:underline underline-offset-4'
+              className='inline-flex items-center gap-1 text-xs text-primary underline-offset-4 hover:underline'
             >
               Open in Google Maps
               <ExternalLinkIcon className='size-3' />
@@ -290,7 +291,7 @@ function UnlocodeDetail({ entry }: { entry: UnlocodeEntry }) {
 
       {entry.iata && (
         <div className='space-y-0.5'>
-          <dt className='text-xs font-medium uppercase tracking-wider text-muted-foreground'>IATA Code</dt>
+          <dt className='text-xs font-medium tracking-wider text-muted-foreground uppercase'>IATA Code</dt>
           <dd className='font-mono text-xs'>{entry.iata}</dd>
         </div>
       )}

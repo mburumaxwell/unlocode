@@ -2,6 +2,7 @@
 
 import { PlayIcon } from 'lucide-react';
 import * as React from 'react';
+
 import { CodeBlock } from '@/components/code-block';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -15,13 +16,13 @@ export default function DocsPage() {
       <div className='mx-auto max-w-3xl px-4 py-8'>
         <div className='mb-8'>
           <h1 className='text-lg font-semibold text-foreground'>UN/LOCODE API Reference</h1>
-          <p className='text-sm text-muted-foreground mt-1'>
+          <p className='mt-1 text-sm text-muted-foreground'>
             Public REST API for searching and looking up{' '}
             <a
               href='https://unece.org/trade/cefact/unlocode-code-list-country-and-territory'
               target='_blank'
               rel='noopener noreferrer'
-              className='underline underline-offset-2 hover:text-foreground transition-colors'
+              className='underline underline-offset-2 transition-colors hover:text-foreground'
             >
               UN/LOCODE
             </a>{' '}
@@ -30,7 +31,7 @@ export default function DocsPage() {
         </div>
 
         <div className='flex flex-col gap-10'>
-          <p className='text-sm text-muted-foreground leading-relaxed'>
+          <p className='text-sm leading-relaxed text-muted-foreground'>
             Base URL:{' '}
             <code className='rounded bg-muted px-1.5 py-0.5 font-mono text-xs text-foreground'>{`${config.siteUrl}/api/unlocode`}</code>
             . All responses include{' '}
@@ -124,7 +125,7 @@ export default function DocsPage() {
 
           {/* Notes */}
           <section>
-            <h2 className='text-sm font-semibold text-foreground mb-3'>Notes</h2>
+            <h2 className='mb-3 text-sm font-semibold text-foreground'>Notes</h2>
             <ul className='flex flex-col gap-2 text-sm text-muted-foreground'>
               <li className='flex gap-2'>
                 <span className='text-muted-foreground/50 select-none'>--</span>
@@ -212,13 +213,13 @@ function EndpointSection({
       <p className='text-sm text-muted-foreground'>{description}</p>
 
       {params.length > 0 && (
-        <div className='rounded-lg border overflow-hidden'>
+        <div className='overflow-hidden rounded-lg border'>
           <table className='w-full text-sm'>
             <thead>
               <tr className='border-b bg-muted/50'>
-                <th className='px-3 py-2 text-left font-medium text-muted-foreground text-xs'>Parameter</th>
-                <th className='px-3 py-2 text-left font-medium text-muted-foreground text-xs'>Type</th>
-                <th className='px-3 py-2 text-left font-medium text-muted-foreground text-xs'>Description</th>
+                <th className='px-3 py-2 text-left text-xs font-medium text-muted-foreground'>Parameter</th>
+                <th className='px-3 py-2 text-left text-xs font-medium text-muted-foreground'>Type</th>
+                <th className='px-3 py-2 text-left text-xs font-medium text-muted-foreground'>Description</th>
               </tr>
             </thead>
             <tbody className='divide-y divide-border'>
@@ -280,7 +281,7 @@ function TryIt({ path }: { path: string }) {
       </Button>
 
       {error && (
-        <div className='rounded-lg border border-destructive/30 bg-destructive/5 p-3 text-xs text-destructive font-mono'>
+        <div className='rounded-lg border border-destructive/30 bg-destructive/5 p-3 font-mono text-xs text-destructive'>
           {error}
         </div>
       )}

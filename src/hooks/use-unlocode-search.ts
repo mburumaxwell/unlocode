@@ -1,4 +1,5 @@
 import useSWR from 'swr';
+
 import type { UnlocodeEntry, UnlocodeFunctionCode } from '@/lib/unlocode';
 
 interface UseUnlocodeSearchParams {
