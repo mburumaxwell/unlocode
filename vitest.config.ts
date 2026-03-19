@@ -1,11 +1,9 @@
 import { fileURLToPath } from 'node:url';
 import { loadEnv } from 'vite';
-import tsconfigPaths from 'vite-tsconfig-paths';
 import { configDefaults, defineConfig } from 'vitest/config';
 
-/** @type {import("vitest/config").ViteUserConfig} */
 export default defineConfig(({ mode }) => ({
-  plugins: [tsconfigPaths()],
+  resolve: { tsconfigPaths: true },
   test: {
     globals: true,
     watch: false,
