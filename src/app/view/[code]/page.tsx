@@ -12,10 +12,7 @@ import { UNLOCODE_FUNCTIONS, type UnlocodeEntry } from '@/lib/unlocode';
 export async function generateMetadata(props: PageProps<'/view/[code]'>): Promise<Metadata> {
   const { code } = await props.params;
   const entry = getEntryByCode(code.toUpperCase());
-
-  if (!entry) {
-    return { title: `${code} — UN/LOCODE` };
-  }
+  if (!entry) return { title: `${code} — UN/LOCODE` };
 
   const country = getCountry(entry.country);
   return {
@@ -27,10 +24,7 @@ export async function generateMetadata(props: PageProps<'/view/[code]'>): Promis
 export default async function ViewLocodePage(props: PageProps<'/view/[code]'>) {
   const { code } = await props.params;
   const entry = getEntryByCode(code.toUpperCase());
-
-  if (!entry) {
-    notFound();
-  }
+  if (!entry) return notFound();
 
   return (
     <main className='min-h-[calc(100vh-3.5rem)]'>

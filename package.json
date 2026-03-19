@@ -11,7 +11,7 @@
     "data:download": "node --import tsx ./src/data/scripts/download.ts",
     "data:convert": "node --import tsx ./src/data/scripts/convert.ts",
     "data:refresh": "pnpm data:download && pnpm data:convert",
-    "ui-gen": "pnpm exec shadcn add --overwrite badge button-group card collapsible combobox field input-group select separator sheet spinner --overwrite",
+    "ui-gen": "pnpm exec shadcn add --overwrite badge button-group card collapsible combobox field input-group select separator sheet skeleton spinner --overwrite",
     "ui-diff": "pnpm ui-gen --diff",
     "dev": "next dev",
     "build": "next build",
