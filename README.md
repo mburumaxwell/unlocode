@@ -13,7 +13,11 @@ Use the live site for the full experience, docs, and API reference: [unlocode.ve
 
 ## Local Development
 
+Use the Node version from [`.nvmrc`](./.nvmrc) before installing dependencies or running scripts:
+
 ```bash
+nvm use
+corepack enable
 pnpm install
 pnpm dev
 ```
