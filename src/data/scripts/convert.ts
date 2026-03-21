@@ -16,6 +16,7 @@
  *
  * Rows with change indicator "=" are reference entries (exonym ↔ local name mappings).
  */
+import { existsSync } from 'node:fs';
 import { readFile, readdir, writeFile } from 'node:fs/promises';
 import path from 'node:path';
 
@@ -138,7 +139,6 @@ function parseFunctions(classifier: string, unknownClassifiers: Set<string>): Un
 
 async function main() {
   const selectedRelease = await detectLatestRelease(RAW_DIR);
-
   if (!selectedRelease) {
     throw new Error(`Could not detect release in ${RAW_DIR}. Run data:download first.`);
   }
@@ -264,19 +264,28 @@ async function main() {
   lines.push(']');
   lines.push('');
 
-  await writeFile(OUTPUT_FILE, lines.join('\n'), 'utf8');
-  await writeFile(
-    META_OUTPUT_FILE,
-    `${JSON.stringify(
-      {
-        datasetVersion: selectedRelease,
-        generatedAt: new Date().toISOString(),
-      },
-      null,
-      2,
-    )}\n`,
-    'utf8',
-  );
+  type Meta = { datasetVersion?: string; generatedAt?: string };
+  const outputContent = lines.join('\n');
+  let previousMeta = existsSync(META_OUTPUT_FILE)
+    ? (JSON.parse(await readFile(META_OUTPUT_FILE, 'utf8')) as Meta)
+    : undefined;
+  const previousOutput = existsSync(OUTPUT_FILE) ? await readFile(OUTPUT_FILE, 'utf8') : undefined;
+  const changed = previousMeta?.datasetVersion !== selectedRelease || previousOutput !== outputContent;
+  if (changed) {
+    await writeFile(OUTPUT_FILE, outputContent, 'utf8');
+    await writeFile(
+      META_OUTPUT_FILE,
+      `${JSON.stringify(
+        {
+          datasetVersion: selectedRelease,
+          generatedAt: new Date().toISOString(),
+        },
+        null,
+        2,
+      )}\n`,
+      'utf8',
+    );
+  }
 
   if (unknownClassifiers.size > 0) {
     console.warn(
@@ -284,8 +293,12 @@ async function main() {
     );
   }
 
-  console.log(`Converted ${partFiles.length} files (${selectedRelease}) -> ${OUTPUT_FILE}`);
-  console.log(`Wrote dataset metadata -> ${META_OUTPUT_FILE}`);
+  console.log(`${changed ? 'Converted' : 'Checked'} ${partFiles.length} files (${selectedRelease}) -> ${OUTPUT_FILE}`);
+  console.log(
+    changed
+      ? `Wrote dataset metadata -> ${META_OUTPUT_FILE}`
+      : `Skipped dataset metadata -> ${META_OUTPUT_FILE} (no changes detected)`,
+  );
   console.log(`Wrote ${entries.length.toLocaleString()} entries`);
 }
 
