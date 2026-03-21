@@ -36,15 +36,32 @@ jobs:
       - name: Refresh UN/LOCODE data
         run: pnpm data:refresh
 
+      - name: Current date
+        id: current-date
+        uses: mburumaxwell/actions/current-date@main
+
+      - name: Generate token
+        id: generate-token
+        uses: actions/create-github-app-token@v2
+        with:
+          app-id: ${{ secrets.GH_APP_ID_RELEASER }}
+          private-key: ${{ secrets.GH_APP_PRIVATE_KEY_RELEASER }}
+          permission-contents: write
+          permission-pull-requests: write
+
       - name: Create pull request
         uses: peter-evans/create-pull-request@v8
         with:
-          commit-message: 'chore(data): refresh UN/LOCODE data'
-          title: 'chore(data): refresh UN/LOCODE data'
+          token: ${{ steps.generate-token.outputs.token }}
+          base: main
+          commit-message: 'Update data source as of ${{ steps.current-date.outputs.date }}'
+          title: 'Update data source as of ${{ steps.current-date.outputs.date }}'
+          branch: unlocode-data-refresh
+          signoff: true
           body: |
             Automated monthly UN/LOCODE data refresh.
 
             - Download latest UNECE CSV files into `src/data/raw`
             - Convert raw CSV files into `src/data/data.json`
-          branch: codex/unlocode-data-refresh
           delete-branch: true
+          sign-commits: true
