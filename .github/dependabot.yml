@@ -31,6 +31,7 @@ updates:
           - 'react-dom'
           - 'oxfmt'
           - 'oxlint'
+          - 'portless'
         update-types:
           - minor
           - patch

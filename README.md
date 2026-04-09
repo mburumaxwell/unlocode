@@ -11,7 +11,7 @@ Use the live site for the full experience, docs, and API reference: [unlocode.ve
 - Reusable React component (`UnlocodeInput`) for forms
 - Data pipeline scripts to download and convert official UNECE CSV files
 
-## Local Development
+## Local setup
 
 Use the Node version from [`.nvmrc`](./.nvmrc) before installing dependencies or running scripts:
 
@@ -19,15 +19,44 @@ Use the Node version from [`.nvmrc`](./.nvmrc) before installing dependencies or
 nvm use
 corepack enable
 pnpm install
+```
+
+### Run the app
+
+```bash
 pnpm dev
 ```
 
-Common commands:
+Default local URL:
+
+- `https://unlocode.localhost`
+
+### Bypass portless
 
 ```bash
-pnpm lint
-pnpm test
-pnpm data:refresh
+pnpm next dev
+```
+
+### First-run HTTPS trust
+
+If your browser shows a certificate warning:
+
+```bash
+pnpm exec portless trust
+```
+
+### Safari hostname resolution
+
+If Safari cannot resolve `.localhost` subdomains:
+
+```bash
+pnpm exec portless hosts sync
+```
+
+To remove those entries later:
+
+```bash
+pnpm exec portless hosts clean
 ```
 
 ## Data Refresh

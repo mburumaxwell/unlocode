@@ -21,6 +21,11 @@
       "sourceType": "github",
       "computedHash": "e3aeb1f9e8a68d24df0c1c2e3c8ab97ede09a7251a2c76988318d02254346979"
     },
+    "portless": {
+      "source": "vercel-labs/portless",
+      "sourceType": "github",
+      "computedHash": "4ec0e34bf4604a1327fd396825d50fbb3950d94d5f68deaea48c89788444292b"
+    },
     "react-doctor": {
       "source": "millionco/react-doctor",
       "sourceType": "github",
