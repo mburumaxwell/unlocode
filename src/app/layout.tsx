@@ -27,6 +27,10 @@ export const metadata: Metadata = {
     title: rootTitleTemplate,
     type: 'website',
   },
+  verification: {
+    // <meta name="google-site-verification" content="fzB_qqPaQfnnG9cep9CK19B6w0vENef9An4r025u0QU" />
+    google: 'fzB_qqPaQfnnG9cep9CK19B6w0vENef9An4r025u0QU',
+  },
 };
 
 export default function RootLayout({
