@@ -97,8 +97,8 @@ importers:
         specifier: 1.62.0
         version: 1.62.0
       portless:
-        specifier: 0.10.3
-        version: 0.10.3
+        specifier: 0.12.0
+        version: 0.12.0
       rimraf:
         specifier: 6.1.3
         version: 6.1.3
@@ -2498,8 +2498,8 @@ packages:
     resolution: {integrity: sha512-wQ0b/W4Fr01qtpHlqSqspcj3EhBvimsdh0KlHhH8HRZnMsEa0ea2fTULOXOS9ccQr3om+GcGRk4e+isrZWV8qQ==}
     engines: {node: '>=16.20.0'}
 
-  portless@0.10.3:
-    resolution: {integrity: sha512-lXbVUsNiwWMKJGMi49HhTMW0lS7u0EzawonDZQ+yglSnHioiQK18Y4Fe0Ilk+TuXej71E/nTOHIFIBjUGvTm9w==}
+  portless@0.12.0:
+    resolution: {integrity: sha512-zE8EYJ5xIEtKEBu1wnD+FavOE90/GNxRixF4Mu2hxMvDuVx1ftUbA6VbjbxI9sP9LUt0L26l6OiENGo4EFtLfw==}
     engines: {node: '>=20'}
     os: [darwin, linux, win32]
     hasBin: true
@@ -5122,7 +5122,7 @@ snapshots:
 
   pkce-challenge@5.0.1: {}
 
-  portless@0.10.3: {}
+  portless@0.12.0: {}
 
   postcss-selector-parser@7.1.1:
     dependencies:
