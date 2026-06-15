@@ -48,7 +48,7 @@
     "@types/react-dom": "19.2.3",
     "@vercel/config": "0.5.2",
     "babel-plugin-react-compiler": "1.0.0",
-    "csv-parse": "6.2.1",
+    "csv-parse": "7.0.0",
     "oxfmt": "0.54.0",
     "oxlint": "1.69.0",
     "portless": "0.14.0",
