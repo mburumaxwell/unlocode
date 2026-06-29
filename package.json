@@ -51,7 +51,7 @@
     "csv-parse": "7.0.0",
     "oxfmt": "0.55.0",
     "oxlint": "1.70.0",
-    "portless": "0.14.0",
+    "portless": "0.15.0",
     "rimraf": "6.1.3",
     "tailwindcss": "4.3.1",
     "tsx": "4.22.4",
