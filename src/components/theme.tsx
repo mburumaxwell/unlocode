@@ -5,6 +5,7 @@ import { ThemeProvider as NextThemesProvider, type ThemeProviderProps, useTheme 
 import * as React from 'react';
 
 import { Button } from '@/components/ui/button';
+import { useMounted } from '@/hooks/use-mounted';
 
 export function ThemeProvider({ children }: ThemeProviderProps) {
   return (
@@ -16,9 +17,7 @@ export function ThemeProvider({ children }: ThemeProviderProps) {
 
 export function useTheme() {
   const { theme, setTheme, resolvedTheme } = useNextTheme();
-  const [mounted, setMounted] = React.useState(false);
-
-  React.useEffect(() => setMounted(true), []);
+  const mounted = useMounted();
 
   return {
     theme,

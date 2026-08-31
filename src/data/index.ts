@@ -9,9 +9,10 @@ export interface UnlocodeDatasetMeta {
 }
 
 // Build the full list with code
-const database = (locations as Omit<UnlocodeEntry, 'code'>[]).map(
-  (loc): UnlocodeEntry => ({ ...loc, code: `${loc.country}${loc.location}` }),
-);
+const database = (locations as Omit<UnlocodeEntry, 'code'>[]).map((loc): UnlocodeEntry => ({
+  ...loc,
+  code: `${loc.country}${loc.location}`,
+}));
 const datasetMeta = meta as UnlocodeDatasetMeta;
 
 // Search function
