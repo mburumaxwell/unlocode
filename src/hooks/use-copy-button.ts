@@ -1,5 +1,3 @@
-'use client';
-
 import { type MouseEventHandler, useCallback, useEffect, useRef, useState } from 'react';
 
 /**
@@ -13,14 +11,11 @@ export function useCopyButton(
   timeout = 2000,
 ): [checked: boolean, onClick: MouseEventHandler] {
   const [checked, setChecked] = useState(false);
-  const callbackRef = useRef(onCopy);
   const timeoutRef = useRef<number | null>(null);
-
-  callbackRef.current = onCopy;
 
   const onClick: MouseEventHandler = useCallback(() => {
     if (timeoutRef.current) window.clearTimeout(timeoutRef.current);
-    const res = Promise.resolve(callbackRef.current());
+    const res = Promise.resolve(onCopy());
 
     void res.then(() => {
       setChecked(true);
@@ -28,7 +23,7 @@ export function useCopyButton(
         setChecked(false);
       }, timeout);
     });
-  }, [timeout]);
+  }, [onCopy, timeout]);
 
   // Avoid updates after being unmounted
   useEffect(() => {

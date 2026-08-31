@@ -10,14 +10,12 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     '/search',
     '/component',
     '/docs',
-  ].map(
-    (route): Route => ({
-      url: `${config.siteUrl}${route}`,
-      // lastModified: new Date().toISOString(),
-      changeFrequency: 'daily',
-      priority: 0.5,
-    }),
-  );
+  ].map((route): Route => ({
+    url: `${config.siteUrl}${route}`,
+    // lastModified: new Date().toISOString(),
+    changeFrequency: 'daily',
+    priority: 0.5,
+  }));
 
   return [...routesMap];
 }
