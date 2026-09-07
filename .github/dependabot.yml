@@ -5,6 +5,24 @@
 
 version: 2
 updates:
+  - package-ecosystem: 'github-actions'
+    directory: '/'
+    schedule:
+      interval: 'weekly'
+      day: 'monday'
+      time: '02:00'
+    cooldown:
+      default-days: 5
+
+  - package-ecosystem: 'devcontainers'
+    directory: '/'
+    schedule:
+      interval: 'weekly'
+      day: 'monday'
+      time: '02:00'
+    cooldown:
+      default-days: 5
+
   - package-ecosystem: 'npm'
     directory: '/'
     schedule:
@@ -12,6 +30,8 @@ updates:
       day: 'monday'
       time: '02:00'
     open-pull-requests-limit: 20
+    cooldown:
+      default-days: 3
     groups:
       next-and-react:
         patterns:
@@ -23,29 +43,13 @@ updates:
       oxc: { patterns: ['oxfmt', 'oxlint'] }
       all-npm-minor-updates:
         patterns: ['*']
+        # Only list packages that do NOT have a named group above. Named groups
+        # are defined first and match every update type, so first-match-wins
+        # already keeps their updates out of this catch-all — re-listing them
+        # here is redundant. These remaining entries deliberately carve
+        # breaking-prone / standalone packages out so each gets its own PR.
         exclude-patterns:
-          - '@types/react'
-          - '@types/react-dom'
-          - 'next'
-          - 'react'
-          - 'react-dom'
-          - 'oxfmt'
-          - 'oxlint'
           - 'portless'
         update-types:
           - minor
           - patch
-
-  - package-ecosystem: 'github-actions'
-    directory: '/'
-    schedule:
-      interval: 'weekly'
-      day: 'monday'
-      time: '02:00'
-
-  - package-ecosystem: 'devcontainers'
-    directory: '/'
-    schedule:
-      interval: 'weekly'
-      day: 'monday'
-      time: '02:00'
