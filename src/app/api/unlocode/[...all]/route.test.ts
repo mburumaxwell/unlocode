@@ -67,8 +67,9 @@ describe('/api/unlocode route', () => {
     expect(found.status).toBe(200);
     expect(found.headers.get('cache-control')).toContain('s-maxage=3600');
 
-    const foundBody = (await found.json()) as { code: string };
+    const foundBody = (await found.json()) as { code: string; display_name: string };
     expect(foundBody.code).toBe('SGSIN');
+    expect(foundBody.display_name).toBe('Singapore');
 
     const missing = await GET(makeRequest('/ZZZZZ'));
     expect(missing.status).toBe(204);

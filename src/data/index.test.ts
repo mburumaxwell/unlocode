@@ -55,6 +55,23 @@ describe('data/index', () => {
     expect(new Date(meta.generatedAt).toString()).not.toBe('Invalid Date');
   });
 
+  it('derives display_name from the name and the English country name', () => {
+    expect(getEntryByCode('USNYC')?.display_name).toBe('New York, United States');
+    expect(getEntryByCode('NLRTM')?.display_name).toBe('Rotterdam, Netherlands');
+  });
+
+  it('omits the country from display_name when the name already is the country', () => {
+    expect(getEntryByCode('SGSIN')?.display_name).toBe('Singapore');
+    expect(getEntryByCode('HKHKG')?.display_name).toBe('Hong Kong');
+    expect(getEntryByCode('LULUX')?.display_name).toBe('Luxembourg');
+  });
+
+  it('names installations in international waters (XZ) in display_name', () => {
+    const { results, total } = searchUnlocodeDatabase({ countries: ['XZ'], limit: 5 });
+    expect(total).toBeGreaterThan(0);
+    expect(results.every((r) => r.display_name === `${r.name}, International Waters`)).toBe(true);
+  });
+
   it('stores exonyms for DKCPH (Copenhagen)', () => {
     const entry = getEntryByCode('DKCPH');
     expect(entry).toBeDefined();

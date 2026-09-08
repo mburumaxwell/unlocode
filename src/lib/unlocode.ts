@@ -1,5 +1,7 @@
 import { z } from 'zod';
 
+import { getCountryName } from '@/lib/countries';
+
 export const UnlocodeFunctionCodeSchema = z.enum([
   'port',
   'rail_terminal',
@@ -52,6 +54,7 @@ export const UnlocodeEntrySchema = z.object({
   location: z.string(), // e.g. "NYC"
   name: z.string(), // e.g. "New York" (ASCII, no diacritics)
   name_native: z.string().optional(), // e.g. "Łódź" — original name with diacritics; omitted when identical to `name`
+  display_name: z.string(), // e.g. "New York, United States" — `name` with the English country name; derived, not in source data
   subdivision: z.string(), // e.g. "NY"
   functions: UnlocodeFunctionCodeSchema.array(), // e.g. ["port", "airport", "postal_exchange"]
   status: UnlocodeStatusCodeSchema, // e.g. "AA"
@@ -60,3 +63,12 @@ export const UnlocodeEntrySchema = z.object({
   coordinates: z.object({ lat: z.number(), lon: z.number() }).nullable(), // e.g. { lat: 40.7, lon: -74.0 }
 });
 export type UnlocodeEntry = z.infer<typeof UnlocodeEntrySchema>;
+
+/** The shape stored in data.json: `code` and `display_name` are derived when the dataset is loaded. */
+export type UnlocodeDataEntry = Omit<UnlocodeEntry, 'code' | 'display_name'>;
+
+/** Formats the human-friendly name for an entry, e.g. "Rotterdam, Netherlands" (but "Singapore", not "Singapore, Singapore"). */
+export function formatUnlocodeDisplayName(entry: Pick<UnlocodeEntry, 'name' | 'country'>): string {
+  const country = getCountryName(entry.country);
+  return entry.name.toLowerCase() === country.toLowerCase() ? entry.name : `${entry.name}, ${country}`;
+}

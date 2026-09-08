@@ -29,3 +29,17 @@ export function getCountry(code: string): CountryInfo | undefined {
   const upperCode = code.toUpperCase();
   return countries.find((country) => country.iso2 === upperCode || country.iso3 === upperCode);
 }
+
+/** Names for codes UN/LOCODE uses that are not ISO-3166 countries. */
+const EXTRA_COUNTRY_NAMES: Record<string, string> = {
+  XZ: 'International Waters', // UN/LOCODE: "Installations in International Waters"
+};
+
+/**
+ * Get the English name for a country code, falling back to the code itself when unknown.
+ * @param code - The ISO alpha-2 or alpha-3 country code.
+ */
+export function getCountryName(code: string): string {
+  const upperCode = code.toUpperCase();
+  return getCountry(upperCode)?.name ?? EXTRA_COUNTRY_NAMES[upperCode] ?? upperCode;
+}

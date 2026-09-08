@@ -1,4 +1,9 @@
-import type { UnlocodeEntry, UnlocodeFunctionCode } from '@/lib/unlocode';
+import {
+  type UnlocodeDataEntry,
+  type UnlocodeEntry,
+  type UnlocodeFunctionCode,
+  formatUnlocodeDisplayName,
+} from '@/lib/unlocode';
 
 import locations from './data.json';
 import meta from './data.meta.json';
@@ -8,10 +13,11 @@ export interface UnlocodeDatasetMeta {
   generatedAt: string;
 }
 
-// Build the full list with code
-const database = (locations as Omit<UnlocodeEntry, 'code'>[]).map((loc): UnlocodeEntry => ({
+// Build the full list with the derived fields (code, display_name)
+const database = (locations as UnlocodeDataEntry[]).map((loc): UnlocodeEntry => ({
   ...loc,
   code: `${loc.country}${loc.location}`,
+  display_name: formatUnlocodeDisplayName(loc),
 }));
 const datasetMeta = meta as UnlocodeDatasetMeta;
 

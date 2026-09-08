@@ -70,6 +70,7 @@ export default function DocsPage() {
     {
       "code": "NLRTM",
       "name": "Rotterdam",
+      "display_name": "Rotterdam, Netherlands",
       "country": "NL",
       "subdivision": "ZH",
       "functions": ["port", "rail_terminal", "road_terminal", "airport"],
@@ -112,6 +113,7 @@ export default function DocsPage() {
             exampleResponse={`{
   "code": "USNYC",
   "name": "New York",
+  "display_name": "New York, United States",
   "country": "US",
   "subdivision": "NY",
   "functions": ["port", "rail_terminal", "road_terminal", "airport", "postal_exchange"],
@@ -155,6 +157,17 @@ export default function DocsPage() {
                 <span>
                   <code className='rounded bg-muted px-1 py-0.5 font-mono text-xs text-foreground'>GET /meta</code>{' '}
                   reports the loaded dataset version and generation timestamp.
+                </span>
+              </li>
+              <li className='flex gap-2'>
+                <span className='text-muted-foreground/50 select-none'>--</span>
+                <span>
+                  <code className='rounded bg-muted px-1 py-0.5 font-mono text-xs text-foreground'>display_name</code>{' '}
+                  combines the location name with the English country name (e.g.{' '}
+                  <code className='rounded bg-muted px-1 py-0.5 font-mono text-xs text-foreground'>
+                    Rotterdam, Netherlands
+                  </code>
+                  ) so it can be shown to people as-is.
                 </span>
               </li>
               <li className='flex gap-2'>

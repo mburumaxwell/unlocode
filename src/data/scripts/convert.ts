@@ -23,13 +23,13 @@ import path from 'node:path';
 import { parse } from 'csv-parse/sync';
 
 import {
+  type UnlocodeDataEntry as DataEntry,
   type UnlocodeEntry,
   type UnlocodeFunctionCode,
   UnlocodeFunctionCodeSchema,
   UnlocodeStatusCodeSchema,
 } from '@/lib/unlocode';
 
-type DataEntry = Omit<UnlocodeEntry, 'code'>;
 const RAW_DIR = path.join(process.cwd(), 'src/data/raw');
 const OUTPUT_FILE = path.join(process.cwd(), 'src/data/data.json');
 const META_OUTPUT_FILE = path.join(process.cwd(), 'src/data/data.meta.json');
