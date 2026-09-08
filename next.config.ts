@@ -9,6 +9,9 @@ const config: NextConfig = {
     formats: ['image/avif', 'image/webp'],
     unoptimized: true, // do not need image optimisation
   },
+
+  // Dev runs behind portless at unlocode.test (Next 15 blocks cross-origin dev requests by default).
+  allowedDevOrigins: ['unlocode.test'],
 };
 
 export default config;
