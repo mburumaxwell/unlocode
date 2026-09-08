@@ -1,5 +1,5 @@
 /**
- * Converts raw UN/LOCODE CSV files (Latin-1 encoded) into a compact data.json.
+ * Converts raw UN/LOCODE CSV files (UTF-8 since release 2025-1, Latin-1 before) into a compact data.json.
  *
  * CSV columns (0-indexed, no header row):
  *   [00] change indicator
@@ -90,6 +90,18 @@ function parseCoordinates(value: string): UnlocodeEntry['coordinates'] {
 }
 
 /**
+ * Reads a raw CSV as UTF-8, falling back to Latin-1 for releases before 2025-1.
+ */
+async function readCsvText(filePath: string): Promise<string> {
+  const buffer = await readFile(filePath);
+  try {
+    return new TextDecoder('utf-8', { fatal: true }).decode(buffer);
+  } catch {
+    return buffer.toString('latin1');
+  }
+}
+
+/**
  * Scans src/data/raw/ for versioned Part1 CSVs and returns the most recent
  * release string (e.g. "2024-2"), or undefined if none are found.
  */
@@ -161,7 +173,7 @@ async function main() {
 
   for (const fileName of partFiles) {
     const filePath = path.join(RAW_DIR, fileName);
-    const content = await readFile(filePath, 'latin1');
+    const content = await readCsvText(filePath);
     const rows = parse(content, {
       bom: true,
       columns: false,

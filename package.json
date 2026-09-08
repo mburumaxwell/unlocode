@@ -49,6 +49,7 @@
     "@vercel/config": "0.7.0",
     "babel-plugin-react-compiler": "1.0.0",
     "csv-parse": "7.0.2",
+    "fflate": "0.8.3",
     "oxfmt": "0.66.0",
     "oxlint": "1.81.0",
     "portless": "0.15.6",

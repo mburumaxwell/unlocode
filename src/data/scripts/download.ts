@@ -1,82 +1,73 @@
 /**
- * Downloads the latest UN/LOCODE release CSV files from the UNECE service.
- * Probes for the most recent year/issue combination, then saves the three
- * CodeList part files and the SubdivisionCodes file to src/data/raw/.
+ * Downloads the latest UN/LOCODE release from UNECE's vocab-locode project on the UNICC GitLab
+ * (https://opensource.unicc.org/un/unece/uncefact/vocab-locode). Each release there publishes a
+ * data archive holding the official CSV code list. UNECE's classic download host sits behind a
+ * browser challenge that blocks non-interactive clients, so it cannot be used from automation.
+ *
+ * Extracts the CSV files from the archive into src/data/raw/ under release-prefixed names,
+ * e.g. "2025-1 UNLOCODE CodeListPart1.csv", replacing whatever was there before.
  */
-import { mkdir, writeFile } from 'node:fs/promises';
+import { mkdir, rm, writeFile } from 'node:fs/promises';
 import path from 'node:path';
 
+import { unzipSync } from 'fflate';
+
 const RAW_DIR = path.join(process.cwd(), 'src/data/raw');
-const BASE_URL = 'https://service.unece.org/trade/locode/';
+const PROJECT_URL = 'https://opensource.unicc.org/un/unece/uncefact/vocab-locode';
+const PROJECT_API_URL = 'https://opensource.unicc.org/api/v4/projects/un%2Funece%2Funcefact%2Fvocab-locode';
+const RELEASE_PATTERN = /^(\d{4})-(\d)$/; // e.g. "2025-1"; older tags ("v2023-2") have no archive
 
-/**
- * Checks whether a given release (e.g. "2024-2") exists on the UNECE server.
- * Falls back from HEAD to GET for servers that return 405 on HEAD requests.
- */
-async function releaseExists(baseUrl: string, release: string): Promise<boolean> {
-  const fileName = `${release} UNLOCODE CodeListPart1.csv`;
-  const url = new URL(encodeURIComponent(fileName), baseUrl).toString();
+type GitLabRelease = { tag_name: string; assets: { links: { name: string; url: string }[] } };
 
-  try {
-    const headResponse = await fetch(url, { method: 'HEAD', redirect: 'follow' });
-    if (headResponse.ok) return true;
-    if (headResponse.status !== 405) return false;
-
-    const getResponse = await fetch(url, { redirect: 'follow' });
-    return getResponse.ok;
-  } catch {
-    return false;
-  }
-}
-
-/**
- * Probes backwards from next year to 15 years ago, returning the first
- * release string found (e.g. "2024-2"), or undefined if none exist.
- */
-async function detectLatestRelease(baseUrl: string): Promise<string | undefined> {
-  const currentYear = new Date().getUTCFullYear();
-  const latestYearToTry = currentYear + 1;
-  const earliestYearToTry = currentYear - 15;
-  const maxIssueToTry = 4;
-
-  for (let year = latestYearToTry; year >= earliestYearToTry; year -= 1) {
-    for (let issue = maxIssueToTry; issue >= 1; issue -= 1) {
-      const candidate = `${year}-${issue}`;
-      if (await releaseExists(baseUrl, candidate)) return candidate;
-    }
+/** Finds the newest release tagged as a UN/LOCODE issue and the URL of its data archive. */
+async function findLatestRelease(): Promise<{ release: string; archiveUrl: string }> {
+  const url = `${PROJECT_API_URL}/releases?per_page=20`;
+  const response = await fetch(url);
+  if (!response.ok) {
+    throw new Error(`Failed to list releases: ${response.status} ${response.statusText} (${url})`);
   }
 
-  return undefined;
+  const releases = (await response.json()) as GitLabRelease[];
+  const candidates = releases.flatMap((release) => {
+    const match = release.tag_name.match(RELEASE_PATTERN);
+    return match ? [{ release, year: Number(match[1]), issue: Number(match[2]) }] : [];
+  });
+  candidates.sort((a, b) => b.year - a.year || b.issue - a.issue);
+
+  const latest = candidates[0]?.release;
+  if (!latest) throw new Error(`No UN/LOCODE release found at ${PROJECT_URL}`);
+
+  // Prefer the link the release advertises; fall back to the CI job artifact by convention.
+  const archiveUrl =
+    latest.assets.links.find((link) => link.url.includes('job=package-release'))?.url ??
+    `${PROJECT_URL}/-/jobs/artifacts/${latest.tag_name}/download?job=package-release`;
+  return { release: latest.tag_name, archiveUrl };
 }
 
 async function main() {
-  const release = await detectLatestRelease(BASE_URL);
+  const { release, archiveUrl } = await findLatestRelease();
+  console.log(`Latest release: ${release}`);
 
-  if (!release) {
-    throw new Error('Could not determine latest release from UNECE.');
+  const response = await fetch(archiveUrl, { redirect: 'follow' });
+  if (!response.ok) {
+    throw new Error(`Failed to download archive: ${response.status} ${response.statusText} (${archiveUrl})`);
   }
+  const archive = new Uint8Array(await response.arrayBuffer());
+  console.log(`Downloaded archive (${archive.byteLength.toLocaleString()} bytes)`);
 
-  const files = [
-    `${release} UNLOCODE CodeListPart1.csv`,
-    `${release} UNLOCODE CodeListPart2.csv`,
-    `${release} UNLOCODE CodeListPart3.csv`,
-    `${release} SubdivisionCodes.csv`,
-  ];
+  // Only the CSV files are needed; the archive also carries the MDB, TXT, XML and Turtle editions.
+  const files = unzipSync(archive, {
+    filter: (file) => file.name.startsWith('release/csv/') && file.name.endsWith('.csv'),
+  });
+  if (Object.keys(files).length === 0) throw new Error(`No CSV files found in ${archiveUrl}`);
 
+  await rm(RAW_DIR, { recursive: true, force: true });
   await mkdir(RAW_DIR, { recursive: true });
 
-  for (const fileName of files) {
-    const url = new URL(encodeURIComponent(fileName), BASE_URL).toString();
-    const target = path.join(RAW_DIR, fileName);
-    const response = await fetch(url, { redirect: 'follow' });
-
-    if (!response.ok) {
-      throw new Error(`Failed to download ${fileName}: ${response.status} ${response.statusText} (${url})`);
-    }
-
-    const buffer = Buffer.from(await response.arrayBuffer());
-    await writeFile(target, buffer);
-    console.log(`Downloaded ${fileName} (${buffer.length.toLocaleString()} bytes)`);
+  for (const [entryName, content] of Object.entries(files)) {
+    const fileName = `${release} ${path.basename(entryName)}`;
+    await writeFile(path.join(RAW_DIR, fileName), content);
+    console.log(`Extracted ${fileName} (${content.byteLength.toLocaleString()} bytes)`);
   }
   console.log(`Done. Raw files saved to ${RAW_DIR}`);
 }

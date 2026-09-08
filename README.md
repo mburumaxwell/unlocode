@@ -61,7 +61,9 @@ pnpm exec portless hosts clean
 
 ## Data Refresh
 
-The dataset is generated from official UNECE source files.
+The dataset is generated from the official UNECE release archives published by the
+[vocab-locode](https://opensource.unicc.org/un/unece/uncefact/vocab-locode) project on the UNICC GitLab.
+(UNECE's classic download host sits behind a browser challenge that blocks automated clients.)
 
 ```bash
 pnpm data:download
